@@ -46,30 +46,22 @@ if uploaded_file:
                     query_encoded = urllib.parse.quote(libro_input)
                     link_audible = f"https://www.audible.it/search?keywords={query_encoded}"
                     
+                    # --- FIX ERRORE QUI ---
                     st.markdown(f"""
                         <div style="background-color: #f9f9f9; padding: 20px; border: 2px solid #ffa500; border-radius: 10px; text-align: center;">
                             <p style="color: #333; font-weight: bold;">CONDIZIONE PER L'ACQUISTO:</p>
-                            <p style="font-size: 0.9em; color: #666;">Il libro va comprato solo se esiste la versione audio.</p>
+                            <p style="font-size: 0.9em; color: #666;">Il libro va comprato solo se esiste la versione audio su Audible.</p>
                             <a href="{link_audible}" target="_blank" style="text-decoration: none;">
                                 <div style="background-color: #ffa500; color: white; padding: 12px; border-radius: 5px; font-weight: bold; margin-top: 10px;">
                                     🔎 CERCA SU AUDIBLE
                                 </div>
                             </a>
                         </div>
-                        """, unsafe_base64=True)
+                        """, unsafe_allow_html=True) # <--- CORRETTO DA unsafe_base64 A unsafe_allow_html
                     
-                    st.caption("Clicca il tasto arancione: se Audible lo trova, procedi con l'acquisto del cartaceo!")
+                    st.caption("Clicca il tasto arancione: se Audible lo trova, procedi con l'acquisto!")
 
     except Exception as e:
         st.error(f"Errore tecnico: {e}")
 else:
     st.info("Carica il tuo file Excel per iniziare il controllo dei titoli.")
-
-# Riepilogo Logica
-with st.expander("Promemoria Logica d'Acquisto"):
-    st.write("""
-    1. **Ricerca Titolo:** Scrivi il nome del libro.
-    2. **Se appare ROSSO:** Non comprarlo (lo hai già).
-    3. **Se appare GIALLO:** Clicca il link Audible.
-    4. **Decisione Finale:** Compralo solo se Audible restituisce un risultato positivo.
-    """)
